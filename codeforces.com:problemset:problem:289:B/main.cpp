@@ -17,40 +17,53 @@ const int maxn = INT_MAX;
 
 int main() {
   fast;
+  vector<int> lista;
   int n = 0;
   int m = 0;
   int d = 0;
-  int min = INT_MAX;
-  int max = INT_MIN;
+  int count = 0;
   map<int, int> mapa;
 
   cin >> n;
   cin >> m;
   cin >> d;
-  for (int i = 0; i < n; i++) {
-    for (int j = 0; j < m; j++) {
-      int a = 0;
 
-      cin >> a;
-      mapa[a]++;
-      if (a > max)
-        max = a;
-      if (a < min)
-        min = a;
-    }
+  int e = n * m;
+
+  for (int i = 0; i < e; i++) {
+    int a = 0;
+
+    cin >> a;
+    mapa[a]++;
   }
 
   map<int, int>::iterator it = mapa.begin();
+  map<int, int>::iterator end = mapa.end();
+  int residuo = it->fi % d;
 
-  while (it != mapa.end()) {
-    cout << it->fi << " " << it->se << endl;
-    if (it == mapa.begin() && it->se == n * m)
-      cout << "0" << endl;
-    else if (it->fi % d != 0)
+  if (it->se == e) {
+    cout << count << endl;
+    return 0;
+  }
+  while (it != end) {
+    if (it->fi % d != residuo) {
       cout << "-1" << endl;
-    else {
+      return 0;
     }
+    for (int i = 0; i < it->se; i++)
+      lista.push_back(it->fi);
     it++;
   }
+
+  int mediana = round((lista.size() - 1) / 2);
+  int min = lista[mediana];
+
+  it = mapa.begin();
+  while (it != end) {
+    count += (abs(it->fi - min) / d) * it->se;
+    it++;
+  }
+  // cout <<  << endl;
+  cout << count << endl;
   return 0;
 }
